@@ -1,0 +1,71 @@
+# FootPrint — umbrales de detección.
+# Todas las reglas son genéricas: no contienen IPs, dominios ni hosts del caso.
+# Ajustar estos valores no requiere tocar el código.
+
+red:
+  estaciones: "10.20.10.0/24"      # red de usuarios
+  servidores: "10.20.20.0/24"      # red de servidores
+
+proxy_descarga_rara:
+  max_visitas_dominio: 3            # un dominio "raro" se visitó como mucho N veces
+  max_usuarios_dominio: 1           # ... por como mucho N usuarios
+  tipos_riesgo: [application/zip, application/x-zip-compressed, application/octet-stream,
+                 application/x-msdownload, application/x-dosexec, application/x-rar-compressed,
+                 application/x-7z-compressed, application/java-archive, application/vnd.ms-office]
+
+powershell_sospechoso:
+  patrones:                         # expresiones regulares, sin distinguir mayúsculas
+    - '-w(indowstyle)?\s+hidden'
+    - '-(ep|executionpolicy)\s+bypass'
+    - '-e(nc|ncodedcommand)?\s+[a-z0-9+/=]{20,}'
+    - 'downloadstring|downloadfile|invoke-webrequest|iwr\s|iex\s|invoke-expression'
+    - '\\(temp|appdata)\\'
+  min_patrones: 2
+
+reconocimiento:
+  procesos: [whoami.exe, nltest.exe, net.exe, net1.exe, ipconfig.exe, systeminfo.exe,
+             nslookup.exe, arp.exe, route.exe, quser.exe, tasklist.exe, dsquery.exe, adfind.exe]
+  ventana_min: 15
+  min_comandos: 2
+
+beaconing:
+  min_conexiones: 4
+  max_bytes_por_conexion: 100000    # las balizas son pequeñas
+  max_coef_variacion: 0.15          # desviación / media de los intervalos
+  max_hosts_destino: 1              # destino contactado por como mucho N hosts
+
+barrido_smb:
+  puertos: [445, 139, 135]
+  ventana_min: 10
+  min_destinos: 4
+  max_bytes: 5000
+
+fallos_autenticacion:
+  ventana_min: 10
+  min_fallos: 3
+  min_destinos: 3
+
+acceso_masivo_archivos:
+  ventana_min: 15
+  min_archivos: 100
+
+compresion:
+  procesos: [tar.exe, 7z.exe, 7za.exe, rar.exe, winrar.exe, makecab.exe, zip.exe]
+  extensiones: [.zip, .7z, .rar, .cab, .tar, .gz]
+
+salida_grande:
+  min_bytes: 50000000               # 50 MB
+  max_conexiones_destino_raro: 20   # destino con menos conexiones históricas = raro
+
+correlacion:
+  ventana_horas: 2
+  min_tacticas_incidente: 3
+
+hipotesis:
+  descarga_a_ejecucion_min: 10
+  compresion_a_salida_min: 15
+  ratio_tamano: [0.9, 1.1]
+
+pcap:
+  max_paquetes: 2000000
+  tolerancia_alineacion_s: 15

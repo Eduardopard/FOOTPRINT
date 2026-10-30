@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+env/
+
+# Evidencias y resultados: no se versionan (pueden contener datos sensibles)
+evidencias/
+*.pcap
+*.pcapng
+*.cap
+reporte*.md
+!README.md
+resultados*.json
+detecciones*.csv
+
+# Editor y sistema
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+.env

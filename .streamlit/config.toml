@@ -1,0 +1,24 @@
+[server]
+# Solo accesible desde este equipo: la evidencia no se expone en la red.
+address = "127.0.0.1"
+port = 8501
+maxUploadSize = 500
+enableXsrfProtection = true
+headless = true
+
+[browser]
+# Desactiva la telemetría de Streamlit: nada sale del equipo.
+gatherUsageStats = false
+
+[client]
+toolbarMode = "minimal"
+
+[theme]
+# Estilo limpio: fondo gris claro, tarjetas blancas y un solo color de acento.
+base = "light"
+primaryColor = "#1F6FEB"
+backgroundColor = "#F4F5F7"
+secondaryBackgroundColor = "#FFFFFF"
+textColor = "#1A1C1F"
+baseRadius = "large"
+borderColor = "#E6E8EC"
